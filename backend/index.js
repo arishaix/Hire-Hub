@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 const connection = require('./config/db');
 const userRoutes = require('./routes/user');
-const jobRoutes = require('./routes/job')
+const jobRoutes = require('./routes/job');
+const applicationsRoutes = require('./routes/apply')
 
 const app = express();
 app.use(express.json())
@@ -14,6 +15,7 @@ app.get('/' , (req, res)=> {
 })
 app.use('/api/users' , userRoutes);
 app.use('/api/jobs', jobRoutes);
+app.use('/api/applications', applicationsRoutes);
 
 async function startServer(){
     try{
