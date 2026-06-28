@@ -2,11 +2,13 @@ const express = require('express');
 const router = express.Router();
 const jobController = require('../controllers/job');
 const auth = require('../middleware/auth');
-const role = require('../middleware/role')
+const role = require('../middleware/role');
+const validate = require('../middleware/validation');
 
 router.post('/createJob',
     auth.verifyToken,
     role.verifyRole,
+    validate.validateJob,
     jobController.createJob
 )
 

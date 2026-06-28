@@ -26,8 +26,20 @@ exports.createJob = async(req, res) => {
 
 exports.getJobs = async(req, res) => {
     try{
-    const jobs = await Job.find()
-    return res.status(200).json({jobs: jobs})
+        const {title, location , company, page =1 , limit = 5} = req.query;
+        const filters = {};
+        if (title) {
+            filters.title = { $regex: title, $options: 'i' }; 
+        }
+        if (company) {
+            filters.company = { $regex: company, $options: 'i' }; 
+        }
+        if (location) { 
+            filters.location = { $regex: location, $options: 'i' };
+        }
+        const skip = (page - 1) * limit;
+        const jobs = await Job.find(filters).skip(skip).limit(Number(limit));
+        return res.status(200).json({jobs: jobs})
 }catch(error){
     return res.status(500).json({ message: 'Internal Server Error' });
 }
