@@ -34,7 +34,14 @@ exports.createApplication = async(req, res) => {
 exports.getApplications = async( req, res) => {
     try{
     const {jobId} = req.params;
-    const applications = await Application.find({jobId: jobId});
+    const applications = await Application.find({jobId: jobId}).populate(
+'userId',
+'username email'
+)
+.populate(
+'jobId',
+'title'
+);
     if (applications.length === 0) {
         return res.status(404).json({ 
             message: 'No applications found' });
@@ -49,7 +56,10 @@ exports.getApplications = async( req, res) => {
 exports.getCandidateApplications = async( req, res) => {
     try{
     const CandidateId = req.user.userId
-    const applications = await Application.find({userId:CandidateId});
+    const applications = await Application.find({userId:CandidateId}).populate(
+'jobId',
+'title company location'
+);;
     if (applications.length === 0) {
         return res.status(404).json({ 
             message: 'No applications found' });
